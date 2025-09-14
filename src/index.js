@@ -1,4 +1,8 @@
-import { generateRandomMeal, getCurrentMeal } from './meals';
+import {
+  generateRandomMeal,
+  getCurrentMeal,
+  regenerateComponent,
+} from './meals';
 import './styles/styles.css';
 
 console.log('Helow, World');
@@ -17,4 +21,17 @@ generatorBtn.addEventListener('click', () => {
   mainCarb.textContent = `${getCurrentMeal().carb}`;
   mainRootVeg.textContent = `${getCurrentMeal().rootVeg}`;
   mainSalad.textContent = `${getCurrentMeal().salad}`;
+});
+
+const refresh = document.querySelectorAll('.material-symbols-outlined');
+
+refresh.forEach((btn) => {
+  if (btn.classList.contains('protein')) {
+    btn.addEventListener('click', () => {
+      regenerateComponent('protein');
+      mealTitle.textContent = `${getCurrentMeal().title}`;
+
+      mainProtein.textContent = `${getCurrentMeal().protein}`;
+    });
+  }
 });
