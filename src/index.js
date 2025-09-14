@@ -1,3 +1,20 @@
-import './styles.css';
+import { generateRandomMeal, getCurrentMeal } from './meals';
+import './styles/styles.css';
 
 console.log('Helow, World');
+
+const generatorBtn = document.querySelector('.generate-btn');
+const mealTitle = document.querySelector('.title');
+const mainProtein = document.querySelector('.protein');
+const mainCarb = document.querySelector('.carb');
+const mainRootVeg = document.querySelector('.rootVeg');
+const mainSalad = document.querySelector('.salad');
+
+generatorBtn.addEventListener('click', () => {
+  generateRandomMeal();
+  mealTitle.textContent = `${getCurrentMeal().title}`;
+  mainProtein.textContent = `${getCurrentMeal().protein}`;
+  mainCarb.textContent = `${getCurrentMeal().carb}`;
+  mainRootVeg.textContent = `${getCurrentMeal().rootVeg}`;
+  mainSalad.textContent = `${getCurrentMeal().salad}`;
+});
