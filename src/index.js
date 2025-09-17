@@ -4,7 +4,7 @@ import {
   regenerateComponent,
 } from './meals';
 import './styles/styles.css';
-
+import './meals-carousel';
 console.log('Helow, World');
 
 const generatorBtn = document.querySelector('.generate-btn');
