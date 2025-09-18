@@ -5,100 +5,88 @@ const slides = [...document.querySelectorAll('li')];
 const dots = [...document.querySelectorAll('.dot')];
 const dotsContainer = document.querySelector('.dots-container');
 
-let currentActiveIndex;
+let currentActiveIndex = 0;
 let intervalId;
 
-nextBtn.addEventListener('click', () => {
-  for (const slide of slides) {
-    if (slide.classList.contains('active-slide')) {
-      const slideIndex = slides.indexOf(slide);
-      loopAndKill();
-      if (!slides[slideIndex + 1]) {
-        currentActiveIndex = 0;
-        selectIndex();
-        break;
-      }
-      currentActiveIndex = slideIndex + 1;
-      selectIndex();
-      break;
-    }
-  }
-});
+//Init
+function initializeSlider() {
+  nextSlide();
+}
 
-prevBtn.addEventListener('click', () => {
-  for (const slide of slides) {
-    if (slide.classList.contains('active-slide')) {
-      const slideIndex = slides.indexOf(slide);
-      loopAndKill();
-      if (!slides[slideIndex - 1]) {
-        currentActiveIndex = slides.length - 1;
-        selectIndex();
-        break;
-      }
-      currentActiveIndex = slideIndex - 1;
-      selectIndex();
-      break;
-    }
-  }
-});
+intervalId = setInterval(() => {
+  initializeSlider();
+}, 1000);
+
+//Event Listeners
 
 dotsContainer.addEventListener('click', handleDotsClick);
+nextBtn.addEventListener('click', nextSlide);
+prevBtn.addEventListener('click', prevSlide);
+
+//Event Hanlder Functions
+
+function nextSlide() {
+  for (const slide of slides) {
+    if (slide.classList.contains('active-slide')) {
+      if (currentActiveIndex >= slides.length - 1) {
+        currentActiveIndex = 0;
+        showSlide();
+        break;
+      }
+      currentActiveIndex++;
+      showSlide();
+      break;
+    }
+  }
+}
+
+function prevSlide() {
+  for (const slide of slides) {
+    if (slide.classList.contains('active-slide')) {
+      if (currentActiveIndex === 0) {
+        currentActiveIndex = slides.length - 1;
+        showSlide();
+        break;
+      }
+      currentActiveIndex--;
+      showSlide();
+      break;
+    }
+  }
+}
 
 function handleDotsClick(e) {
   if (
     e.target.classList.contains('dot') &&
     !e.target.classList.contains('active-dot')
   ) {
-    loopAndKill();
     currentActiveIndex = dots.indexOf(e.target);
-    selectIndex();
+    showSlide();
   }
 }
 
-intervalId = setInterval(() => {
-  loopEachSecond();
-}, 1000);
+//Helper Functions
 
 function restartSlideshow() {
   clearInterval(intervalId);
 
   intervalId = setInterval(() => {
-    loopEachSecond();
+    initializeSlider();
   }, 5000);
 }
 
-function loopEachSecond() {
-  for (const slide of slides) {
-    if (slide.classList.contains('active-slide')) {
-      const slideIndex = slides.indexOf(slide);
-      loopAndKill();
-      if (!slides[slideIndex + 1]) {
-        currentActiveIndex = 0;
-        selectIndex();
-        break;
-      }
-      currentActiveIndex = slideIndex + 1;
-      selectIndex();
-      break;
-    }
-  }
-}
-
-//Helper Function
-
-function selectIndex() {
+function showSlide() {
+  removeActiveSlide();
   slides[currentActiveIndex].classList.add('active-slide');
   dots[currentActiveIndex].classList.add('active-dot');
   restartSlideshow();
 }
 
-function loopAndKill() {
+function removeActiveSlide() {
   slides.forEach((slide) => {
-    if (slide.classList.contains('active-slide'))
-      slide.classList.remove('active-slide');
+    slide.classList.remove('active-slide');
   });
   dots.forEach((dot) => {
-    if (dot.classList.contains('active-dot'))
-      dot.classList.remove('active-dot');
+    dot.classList.remove('active-dot');
   });
 }
